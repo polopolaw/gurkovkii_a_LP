@@ -1,0 +1,3 @@
+﻿  lec3.cpp
+C:\Users\study\source\repos\lec3\lec3\lec3.cpp(13,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  lec3.vcxproj -> C:\Users\study\source\repos\lec3\Debug\lec3.exe
