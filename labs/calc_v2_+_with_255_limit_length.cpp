@@ -4,6 +4,7 @@
 
 
 char * getNumber(char * number) {
+    //todo реализовать возможность введения отрицательных чисел.
     std::cout << "Введите число " << std::endl;
     std::cin.getline(number, 255);
     while (std::cin.fail()) {
@@ -15,6 +16,33 @@ char * getNumber(char * number) {
     return number;
 }
 
+int compare(char* num1, char* num2) {
+    int flag = 0;
+    //10 - 5 = 5  5 - 10 = -5  10 + 5 = 15  15 - 10
+        //to do определить какое число самое большое. 885 885 0
+    if (strlen(num1) - 1 > strlen(num2) - 1) {
+        flag = 1;
+    }
+    else if (strlen(num1) - 1 < strlen(num2) - 1) {
+        flag = 2;
+    }
+    else {
+        
+        for (int i = 0; i < strlen(num1) - 1; i++) {
+            if (num1[i] > num2[i]) {
+                flag = 1;
+                break;
+            }
+            else if (num1[i] < num2[i]) {
+                //num1<num2
+                flag = 2;
+                break;
+            }
+        }
+    }
+    
+    return flag;
+}
 
 char getOperand() {
     char operand;
@@ -168,6 +196,53 @@ void calc(char * num1, char op, char* num2, char *result) {
             }
         }
     }
+    if (op == '-') {
+        //-555 - -555
+        //555 - 555
+        //@todo обработать вот эти случаи:
+        //! 500 - -500
+        //! -500 - 500
+        int flag = compare(num1, num2);
+        if (flag == 0) {
+            result[0] = 0;
+            return;
+        }
+
+        //num1>num2
+        //909999991 - 258
+        if (flag == 1) {
+            //todo проверить привальность условия в цикле
+            for (int i = strlen(num1) - 1, j = strlen(num2) - 1; i >= 0 || j >= 0; i--, j--) {
+                number1 = translate_to_int(num1[i]);
+                number2 = translate_to_int(num2[j]);
+                if (number1 - number2 < 0) {
+                    result[i] = 10 + number1 - number2;
+                    int counter = 0; 
+                    for (int k = i - 1; translate_to_int(num1[k]) == 0; k--) {
+                        num1[k] = 9;
+                        counter = k;
+                    }
+                    if (translate_to_int(num1[counter]) == 1 && counter == 0) {
+                        num1[counter] == ' ';
+                    }
+                    else {
+                        num1[counter] -= 1;
+                    }
+                    
+                }
+                else {
+                    result[i] = num1[i] - num2[j];
+                }
+            }
+            
+        }
+        //num1<num2
+        if (flag == 2) {
+
+        }
+        
+        
+    }
 }
 
 
@@ -180,7 +255,9 @@ int main()
     char num2a[255];
     char result[255];
     while(true) {
-        calc(getNumber(num1a), getOperand(), getNumber(num2a), result);
+        getNumber(num1a);
+        getNumber(num2a);
+        calc(num1a, getOperand(), num2a, result);
         show_result(result);
     }
     return 0;
